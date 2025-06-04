@@ -1,0 +1,17 @@
+{
+  "name": "agmod-pure-amxx",
+  "version": "0.0.1",
+  "scripts": {
+    "install-linux": "amxxpack install --config .amxxpack.linux.json",
+    "install-windows": "amxxpack install --config .amxxpack.windows.json",
+    "build-linux": "amxxpack build --config .amxxpack.linux.json",
+    "build-windows": "amxxpack build --config .amxxpack.windows.json",
+    "watch-linux": "amxxpack build --watch --config .amxxpack.linux.json",
+    "watch-windows": "amxxpack build --watch --config .amxxpack.windows.json",
+    "clean": "rimraf .compiler .thirdparty dist"
+  },
+  "dependencies": {
+    "amxxpack": "^1.4.7",
+    "rimraf": "^6.0.1"
+  }
+}
