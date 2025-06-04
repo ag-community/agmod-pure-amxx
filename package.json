@@ -1,6 +1,6 @@
 {
   "name": "agmod-pure-amxx",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "install-linux": "amxxpack install --config .amxxpack.linux.json",
     "install-windows": "amxxpack install --config .amxxpack.windows.json",
