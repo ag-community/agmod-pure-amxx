@@ -39,12 +39,22 @@ new g_iPluginFlags;
 
 new g_cvarAgStartMinPlayers;
 new g_cvarAgMatchRunning;
+new g_cvarAgPureLegacy;
+new g_cvarAgPure;
 
-public plugin_init() {
+public plugin_precache() {
     register_plugin(PLUGIN_NAME, PLUGIN_VERSION, PLUGIN_AUTHOR);
 
     g_cvarAgStartMinPlayers = get_cvar_pointer("sv_ag_start_minplayers");
     g_cvarAgMatchRunning = get_cvar_pointer("sv_ag_match_running");
+    g_cvarAgPureLegacy = get_cvar_pointer("sv_ag_pure");
+
+    if (g_cvarAgPureLegacy) {
+        hook_cvar_change(g_cvarAgPureLegacy, "cvar_ag_pure_legacy_hook");
+        g_cvarAgPure = create_cvar("sv_ag_pure_v2", "0", FCVAR_SERVER);
+    } else {
+        g_cvarAgPure = get_cvar_pointer("sv_ag_pure");
+    }
 
     g_iPluginFlags = plugin_flags();
 
@@ -90,6 +100,10 @@ public plugin_end() {
 public client_disconnected(iPlayer) {
     g_iDefaultFileCount[iPlayer] = 0;
     g_bHasDefaultFiles[iPlayer] = false;
+}
+
+public cvar_ag_pure_legacy_hook(pcvar, const szOldValue[], const szNewValue[]) {
+    server_print("Warning: CVar ^"sv_ag_pure^" is deprecated. Use instead ^"sv_ag_pure_v2^"");
 }
 
 public fw_msg_countdown(iPlayer, iDestination, iEntity) {
@@ -157,7 +171,7 @@ public check_player_status() {
         if (!is_user_connected(id))
             continue;
         
-        if (get_pcvar_num(g_cvarAgMatchRunning) && g_iGameState == GAME_RUNNING && !hl_get_user_spectator(id) && !g_bHasDefaultFiles[id]) {
+        if (get_pcvar_num(g_cvarAgPure) && get_pcvar_num(g_cvarAgMatchRunning) && g_iGameState == GAME_RUNNING && !hl_get_user_spectator(id) && !g_bHasDefaultFiles[id]) {
             rh_drop_client(id, "AG Pure: You must have the default files to play on this server.");
         }
     }
